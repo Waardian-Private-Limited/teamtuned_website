@@ -1,134 +1,201 @@
+"use client";
+
 import Link from "next/link";
-import { Facebook, Twitter, Linkedin, Instagram, Mail, Phone, MapPin } from "lucide-react";
+import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { motion, useAnimation, Variants } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
 
+    /* ---------------------------- ROTATING HEADER LOGIC ---------------------------- */
+
+    const phrases = ["Team", "Tuned", "TeamTuned"];
+    const [index, setIndex] = useState(0);
+    const [letters, setLetters] = useState<string[]>(phrases[0].split(""));
+
+    const controls = useAnimation();
+
+    // Parent variant for staggering
+    const parentVariant: Variants = {
+        hidden: {
+            transition: { staggerChildren: 0.05, staggerDirection: -1 },
+        },
+        visible: {
+            transition: { staggerChildren: 0.05, staggerDirection: 1 },
+        },
+    };
+
+    // Letter animation (smooth wipe)
+    const letterVariant: Variants = {
+        initial: {
+            opacity: 0,
+            clipPath: "inset(0 100% 0 0)", // hidden from right side
+            y: 8,
+        },
+        show: (i: number) => ({
+            opacity: 1,
+            clipPath: "inset(0 0% 0 0)",
+            y: 0,
+            transition: {
+                duration: 0.35,
+                ease: [0.3, 0.65, 0.3, 1],
+            },
+        }),
+        hide: (i: number) => ({
+            opacity: 0,
+            clipPath: "inset(0 100% 0 0)",
+            y: 8,
+            transition: {
+                duration: 0.28,
+                ease: [0.3, 0.6, 0.3, 1],
+            },
+        }),
+    };
+
+    useEffect(() => {
+        let active = true;
+
+        async function cycle() {
+            await controls.start("visible");              // reveal text
+            await new Promise((r) => setTimeout(r, 900)); // pause
+            await controls.start("hidden");               // hide text
+            await new Promise((r) => setTimeout(r, 200));
+
+            // update phrase
+            if (!active) return;
+            const next = (index + 1) % phrases.length;
+            setIndex(next);
+            setLetters(phrases[next].split(""));
+
+            // wait for DOM update
+            await new Promise((r) => setTimeout(r, 80));
+
+            controls.start("visible");
+        }
+
+        cycle();
+
+        return () => {
+            active = false;
+        };
+    }, [index]);
+
+    /* ---------------------------- FOOTER UI ---------------------------- */
+
     return (
-        <footer className="relative bg-gradient-to-br from-gray-900 via-blue-900 to-purple-900 text-white">
-            {/* Main Footer Content */}
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+        <footer className="w-full bg-white text-black pt-20 pb-14">
 
-                    {/* Company Info */}
-                    <div className="space-y-4">
-                        <img
-                            src="/TeamTunedWhite.png"
-                            alt="TeamTuned"
-                            className="h-12 w-auto object-contain"
-                        />
-                        <p className="text-gray-300 text-sm leading-relaxed">
-                            Complete workforce management solution for modern businesses. Streamline attendance, payroll, tasks, and more.
-                        </p>
-                        <div className="flex gap-4">
-                            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"
-                                className="hover:text-blue-400 transition-colors">
-                                <Facebook className="w-5 h-5" />
-                            </a>
-                            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"
-                                className="hover:text-blue-400 transition-colors">
-                                <Twitter className="w-5 h-5" />
-                            </a>
-                            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"
-                                className="hover:text-blue-400 transition-colors">
-                                <Linkedin className="w-5 h-5" />
-                            </a>
-                            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"
-                                className="hover:text-blue-400 transition-colors">
-                                <Instagram className="w-5 h-5" />
-                            </a>
+            {/* LEFT-ALIGNED BIG HEADING */}
+            <div className="max-w-7xl mx-auto px-6 mb-14">
+                <div className="flex flex-col">
+                    <motion.h1
+                        className="text-[60px] sm:text-[90px] md:text-[120px] font-extrabold leading-none text-left flex"
+                    >
+                        <motion.span
+                            initial="hidden"
+                            animate={controls}
+                            variants={parentVariant}
+                            className="flex"
+                        >
+                            {letters.map((ch, i) => (
+                                <motion.span
+                                    key={i}
+                                    custom={i}
+                                    variants={letterVariant}
+                                    initial="initial"
+                                    animate="show"
+                                    exit="hide"
+                                    className="inline-block"
+                                >
+                                    {ch}
+                                </motion.span>
+                            ))}
+                        </motion.span>
+
+                        {/* Cursor */}
+                        <span className="ml-1 w-1 bg-black rounded-sm animate-[blink_1s_steps(2,end)_infinite]" />
+                    </motion.h1>
+                </div>
+            </div>
+
+            {/* SOCIAL ICONS */}
+            <div className="max-w-7xl mx-auto px-6 mb-12">
+                <div className="flex gap-4">
+                    {[Facebook, Twitter, Linkedin, Instagram].map((Icon, i) => (
+                        <div
+                            key={i}
+                            className="w-12 h-12 rounded-full border border-black flex items-center justify-center hover:bg-black hover:text-white transition"
+                        >
+                            <Icon className="w-5 h-5" />
                         </div>
-                    </div>
-
-                    {/* Quick Links */}
-                    <div>
-                        <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link href="/" className="text-gray-300 hover:text-white transition-colors">
-                                    Home
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/#features" className="text-gray-300 hover:text-white transition-colors">
-                                    Features
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/demo" className="text-gray-300 hover:text-white transition-colors">
-                                    Book Demo
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/faq" className="text-gray-300 hover:text-white transition-colors">
-                                    FAQ
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Legal */}
-                    <div>
-                        <h3 className="text-lg font-semibold mb-4">Legal</h3>
-                        <ul className="space-y-2">
-                            <li>
-                                <Link href="/terms" className="text-gray-300 hover:text-white transition-colors">
-                                    Terms & Conditions
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/privacy" className="text-gray-300 hover:text-white transition-colors">
-                                    Privacy Policy
-                                </Link>
-                            </li>
-                            <li>
-                                <Link href="/contact" className="text-gray-300 hover:text-white transition-colors">
-                                    Contact Us
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Contact Info */}
-                    <div>
-                        <h3 className="text-lg font-semibold mb-4">Get in Touch</h3>
-                        <ul className="space-y-3">
-                            <li className="flex items-start gap-2">
-                                <Mail className="w-5 h-5 mt-0.5 flex-shrink-0 text-blue-400" />
-                                <a href="mailto:business@waardian.com" className="text-gray-300 hover:text-white transition-colors text-sm">
-                                    business@waardian.com
-                                </a>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <Phone className="w-5 h-5 mt-0.5 flex-shrink-0 text-blue-400" />
-                                <a href="tel:+911234567890" className="text-gray-300 hover:text-white transition-colors text-sm">
-                                    +91 123 456 7890
-                                </a>
-                            </li>
-                            <li className="flex items-start gap-2">
-                                <MapPin className="w-5 h-5 mt-0.5 flex-shrink-0 text-blue-400" />
-                                <span className="text-gray-300 text-sm">
-                                    India
-                                </span>
-                            </li>
-                        </ul>
-                    </div>
+                    ))}
                 </div>
             </div>
 
-            {/* Bottom Bar */}
-            <div className="border-t border-white/10">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-                    <div className="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-400">
-                        <p>
-                            © {currentYear} TeamTuned. All rights reserved.
-                        </p>
-                        <p className="flex items-center gap-2">
-                            A <span className="font-semibold text-white">Waardian</span> Product
-                        </p>
-                    </div>
+            {/* LINK GRID */}
+            <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 sm:grid-cols-4 gap-12 mb-14 text-sm">
+                <div>
+                    <h3 className="font-semibold mb-3">Product</h3>
+                    <ul className="space-y-2 text-gray-600">
+                        <li>Security</li>
+                        <li>Support</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 className="font-semibold mb-3">Company</h3>
+                    <ul className="space-y-2 text-gray-600">
+                        <li>Introducing TeamTuned</li>
+                        <li>About</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 className="font-semibold mb-3">Resources</h3>
+                    <ul className="space-y-2 text-gray-600">
+                        <li>News</li>
+                        <li>Docs</li>
+                        <li>Media Kit</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 className="font-semibold mb-3">Language</h3>
+                    <div className="text-gray-600">English ▼</div>
                 </div>
             </div>
+
+            {/* DOWNLOAD BUTTON */}
+            <div className="flex justify-center mb-12">
+                <button className="px-10 py-4 rounded-full bg-[#00C853] hover:bg-[#00b94d] transition shadow-[0_0_0_2px_black] flex items-center gap-3 text-lg font-medium">
+                    <div className="flex items-center gap-1">
+                        <span className="w-3 h-3 rounded-full bg-yellow-300"></span>
+                        <span className="w-3 h-3 rounded-full bg-blue-300"></span>
+                        <span className="w-3 h-3 rounded-full bg-purple-300"></span>
+                    </div>
+                    Download TeamTuned
+                </button>
+            </div>
+
+            {/* TERMS ROW */}
+            <div className="flex justify-center gap-6 text-xs text-gray-500">
+                <div>Terms of use</div>
+                <div>Privacy policy</div>
+                <div>Cookie Preferences</div>
+            </div>
+
+            {/* COPYRIGHT */}
+            <p className="text-center text-xs text-gray-400 mt-6">
+                © {currentYear} TeamTuned — A Waardian Product
+            </p>
+
+            <style>{`
+        @keyframes blink {
+          0%, 100% { opacity: 1 }
+          50% { opacity: 0 }
+        }
+      `}</style>
         </footer>
     );
 }

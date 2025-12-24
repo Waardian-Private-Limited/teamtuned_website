@@ -1,44 +1,141 @@
-import { cn } from "@/lib/utils";
-import AnimatedText from "./AnimatedText";
+"use client";
 
-export default function Hero() {
+import { cn } from "@/lib/utils";
+import { useEffect, useState, useRef } from "react";
+import Lottie from "lottie-react";
+import heroAnimation from "../../public/video/automation.json";
+
+/* ================= LOTTIE ================= */
+
+function LottieAnimation() {
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => setLoaded(true), []);
+
   return (
-    <section
+    <div
       className={cn(
-        "relative min-h-screen w-full flex items-end justify-center overflow-hidden"
+        // Size
+        "w-64 h-64 sm:w-80 sm:h-80 md:w-[420px] md:h-[420px] lg:w-[620px] lg:h-[620px]",
+        // Pull text closer
+        "-mb-4 sm:-mb-6 md:-mb-50",
+        "transition-all duration-1000",
+        loaded ? "opacity-100 scale-100" : "opacity-0 scale-95"
       )}
     >
-      {/* Background Image */}
-      <div
-        className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat -z-20"
-        style={{
-          backgroundImage: "url('/video/bg_three.png')",
-        }}
-      />
+      <Lottie animationData={heroAnimation} loop autoplay />
+    </div>
+  );
+}
 
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/70 -z-10" />
+/* ================= TEXT ================= */
 
-      {/* Content Positioned on Center of Table */}
-      <div className="absolute bottom-[15%] z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center justify-center text-center space-y-4">
+function ElegantText() {
+  const [visible, setVisible] = useState(false);
 
-        {/* AI Badge */}
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/20 shadow-lg mb-2 animate-fade-in-up">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-          </span>
-          <span className="text-xs font-medium text-emerald-300 tracking-wide uppercase">
-            AI Powered
-          </span>
-        </div>
+  useEffect(() => {
+    const t = setTimeout(() => setVisible(true), 600);
+    return () => clearTimeout(t);
+  }, []);
 
-        <AnimatedText
-          text="Workforce. Automated. Simplified."
-          className="text-white font-bold tracking-tight text-4xl sm:text-5xl md:text-6xl lg:text-7xl drop-shadow-2xl"
+  return (
+    <div
+      className={cn(
+        "text-center transition-all duration-1000",
+        visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-3"
+      )}
+    >
+      <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold leading-tight">
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-700 to-gray-900">
+          Automate Your Workforce
+        </span>{" "}
+        &{" "}
+        <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-700 via-gray-800 to-gray-700">
+          Workplace
+        </span>
+      </h2>
+
+      <p className="mt-4 sm:mt-5 text-gray-600 text-base sm:text-lg md:text-xl">
+        The smartest way to transform your business operations
+      </p>
+    </div>
+  );
+}
+
+/* ================= CTA ================= */
+
+function CTASection() {
+  return (
+    <button className="mt-8 sm:mt-10 px-12 py-4 rounded-lg bg-black text-white hover:scale-105 transition">
+      Book a Demo →
+    </button>
+  );
+}
+
+/* ================= PARTICLES ================= */
+
+function Particles() {
+  const particlesRef = useRef<
+    {
+      width: number;
+      height: number;
+      left: number;
+      top: number;
+      delay: number;
+      duration: number;
+    }[] | null
+  >(null);
+
+  if (typeof window === "undefined") return null;
+
+  if (!particlesRef.current) {
+    particlesRef.current = Array.from({ length: 12 }).map(() => ({
+      width: Math.random() * 2 + 1,
+      height: Math.random() * 2 + 1,
+      left: Math.random() * 100,
+      top: Math.random() * 100,
+      delay: Math.random() * 5,
+      duration: Math.random() * 20 + 10,
+    }));
+  }
+
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      {particlesRef.current.map((p, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full bg-gray-400/20 animate-float"
+          style={{
+            width: p.width,
+            height: p.height,
+            left: `${p.left}%`,
+            top: `${p.top}%`,
+            animationDelay: `${p.delay}s`,
+            animationDuration: `${p.duration}s`,
+          }}
         />
+      ))}
+    </div>
+  );
+}
 
+/* ================= HERO ================= */
+
+export default function Hero() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => setMounted(true), []);
+
+  return (
+    <section className="relative min-h-screen bg-white overflow-hidden">
+      {/* 🔥 KEY CHANGE: no justify-center */}
+      <div className="relative z-10 flex flex-col items-center min-h-screen pt-6 sm:pt-8 md:pt-10">
+        <LottieAnimation />
+        <ElegantText />
+        <CTASection />
       </div>
+
+      {mounted && <Particles />}
     </section>
   );
 }

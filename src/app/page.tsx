@@ -13,8 +13,8 @@ import ComingSoonCinematic from "@/components/commingSoon";
 export default function Page() {
   return (
     <main className="relative">
-      <ComingSoonCinematic />
-      {/* <Navbar />
+      {/* <ComingSoonCinematic /> */}
+      <Navbar />
       <Hero />
       <div id="features">
         <FeaturesSection />
@@ -23,7 +23,7 @@ export default function Page() {
       <WalletSection />
       <TaskSection />
       <InventorySection />
-      <Footer /> */}
+      <Footer />
     </main>
   );
 }

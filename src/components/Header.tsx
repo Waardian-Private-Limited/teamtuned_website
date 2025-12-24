@@ -52,7 +52,7 @@ export default function Header() {
     <>
       {/* HEADER */}
       <motion.header
-        className={`fixed top-0 left-0 w-full py-4 sm:py-6 px-4 sm:px-8 z-[200] transition-all duration-500`}
+        className={`fixed top-0 left-0 w-full py-4 sm:py-0 px-4 sm:px-4 z-[200] transition-all duration-500`}
         initial={{ y: -100 }}
         animate={{ y: 0 }}
         transition={{ duration: 0.6, ease }}
@@ -61,7 +61,7 @@ export default function Header() {
           {/* LOGO */}
           <Link href="/" className="transition-all duration-300">
             <img
-              src={scrolled ? "/LogoBlackText.png" : "/LogoWhiteText.png"}
+              src={scrolled ? "/LogoBlackText.png" : "/LogoBlackText.png"}
               alt="TeamTuned by Waardian"
               className="h-24 sm:h-26 w-auto object-contain"
             />
@@ -71,7 +71,7 @@ export default function Header() {
           <motion.button
             onClick={() => setOpen(!open)}
             className={`relative h-12 w-12 sm:h-14 sm:w-14 flex items-center justify-center rounded-full transition-all duration-300
-            ${scrolled ? "bg-black/10 hover:bg-black/20" : "bg-white/5 backdrop-blur-md hover:bg-white/12"}
+            ${scrolled ? "bg-black/90 hover:bg-black/90" : "bg-black/50 backdrop-blur-md hover:bg-black/90"}
             `}
             whileHover={{ scale: 1.12 }}
             whileTap={{ scale: 0.95 }}
