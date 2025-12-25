@@ -3,6 +3,7 @@ import Navbar from "../components/Header";
 // import Footer from "../components/Footer";
 
 export const metadata = {
+  metadataBase: new URL('https://teamtuned.com'),
   title: "TeamTuned",
   description:
     "",
@@ -36,7 +37,7 @@ export const metadata = {
     images: ["/opengraph.png"],
   },
   icons: {
-    icon: "/teamtuned_ai_logo.svg",
+    icon: "/favicon.ico",
   },
 };
 
@@ -45,13 +46,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <head>
         {/* ✅ FAVICONS */}
-        <link rel="icon" href="/teamtuned_ai_logo.svg?v=2" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/teamtuned_ai_logo.svg?v=2" />
-        <link rel="shortcut icon" href="/favicon.ico?v=2" type="image/x-icon" />
+        <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <meta name="theme-color" content="#ffffff" />
 
         {/* ✅ CANONICAL */}
-        <link rel="canonical" href="https://teamtuned.com" />   
+        <link rel="canonical" href="https://teamtuned.com" />
 
         {/* ✅ BASIC SEO */}
         <meta name="description" content={metadata.description} />

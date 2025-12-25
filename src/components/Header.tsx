@@ -14,6 +14,17 @@ const navLinks = [
 export default function Header() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [hideLogoOnMobile, setHideLogoOnMobile] = useState(false);
+  const [isOverDownloadSection, setIsOverDownloadSection] = useState(false);
+
+  // Preload both logo images for smooth transitions
+  useEffect(() => {
+    const preloadImages = ["/LogoBlackText.png", "/LogoWhiteText.png"];
+    preloadImages.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "unset";
@@ -25,6 +36,67 @@ export default function Header() {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Intersection Observer for footer visibility on mobile
+  useEffect(() => {
+    const footer = document.querySelector('footer');
+    if (!footer) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Only hide logo on mobile (screens smaller than 640px)
+          if (window.innerWidth < 640) {
+            setHideLogoOnMobile(entry.isIntersecting);
+          }
+        });
+      },
+      {
+        threshold: 0.1,
+      }
+    );
+
+    observer.observe(footer);
+
+    // Also handle window resize
+    const handleResize = () => {
+      if (window.innerWidth >= 640) {
+        setHideLogoOnMobile(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Optimized Intersection Observer for download section
+  useEffect(() => {
+    const downloadSection = document.querySelector('section.bg-black');
+    if (!downloadSection) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          // Change logo when section reaches the top
+          setIsOverDownloadSection(entry.isIntersecting);
+        });
+      },
+      {
+        threshold: 0,
+        rootMargin: '-1px 0px 0px 0px', // Trigger exactly when it touches the top
+      }
+    );
+
+    observer.observe(downloadSection);
+
+    return () => {
+      observer.disconnect();
+    };
   }, []);
 
   const ease = [0.16, 1, 0.3, 1] as const;
@@ -59,11 +131,23 @@ export default function Header() {
       >
         <div className="max-w-7xl mx-auto flex justify-between items-center">
           {/* LOGO */}
-          <Link href="/" className="transition-all duration-300">
+          <Link
+            href="/"
+            className={`relative transition-all duration-500 ${hideLogoOnMobile ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+          >
+            {/* Black Logo - Default */}
             <img
-              src={scrolled ? "/LogoBlackText.png" : "/LogoBlackText.png"}
+              src="/LogoBlackText.png"
               alt="TeamTuned by Waardian"
-              className="h-24 sm:h-26 w-auto object-contain"
+              className={`h-24 sm:h-26 w-auto object-contain transition-opacity duration-500 ${isOverDownloadSection ? 'opacity-0' : 'opacity-100'
+                }`}
+            />
+            {/* White Logo - Over Dark Sections */}
+            <img
+              src="/LogoWhiteText.png"
+              alt="TeamTuned by Waardian"
+              className={`absolute top-0 left-0 h-24 sm:h-26 w-auto object-contain transition-opacity duration-500 ${isOverDownloadSection ? 'opacity-100' : 'opacity-0'
+                }`}
             />
           </Link>
 
@@ -84,9 +168,9 @@ export default function Header() {
               transition={{ duration: 0.5, ease }}
               className="absolute flex flex-col gap-1.5"
             >
-              <span className={`block w-8 sm:w-9 h-1 rounded-full ${scrolled ? "bg-black" : "bg-white"}`}></span>
-              <span className={`block w-6 sm:w-7 h-1 rounded-full ${scrolled ? "bg-black" : "bg-white"}`}></span>
-              <span className={`block w-7 sm:w-8 h-1 rounded-full ${scrolled ? "bg-black" : "bg-white"}`}></span>
+              <span className="block w-8 sm:w-9 h-1 rounded-full bg-white"></span>
+              <span className="block w-6 sm:w-7 h-1 rounded-full bg-white"></span>
+              <span className="block w-7 sm:w-8 h-1 rounded-full bg-white"></span>
             </motion.div>
 
             {/* CROSS */}
@@ -101,7 +185,7 @@ export default function Header() {
             >
               <path
                 d="M6 6L22 22M22 6L6 22"
-                stroke={scrolled ? "black" : "white"}
+                stroke="white"
                 strokeWidth="4"
                 strokeLinecap="round"
               />

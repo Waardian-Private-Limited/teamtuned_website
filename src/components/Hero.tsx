@@ -17,7 +17,8 @@ function LottieAnimation() {
       className={cn(
         // Size
         "w-64 h-64 sm:w-80 sm:h-80 md:w-[420px] md:h-[420px] lg:w-[620px] lg:h-[620px]",
-        // Pull text closer
+        // Mobile margin top, pull text closer on larger screens
+        "mt-20 sm:mt-12 md:mt-8",
         "-mb-4 sm:-mb-6 md:-mb-50",
         "transition-all duration-1000",
         loaded ? "opacity-100 scale-100" : "opacity-0 scale-95"

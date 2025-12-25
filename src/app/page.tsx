@@ -4,7 +4,7 @@ import AttendanceFlowSection from "@/components/Attendance";
 import Navbar from "@/components/Header";
 import WalletSection from "@/components/Wallet";
 import TaskSection from "@/components/Task";
-import InventorySection from "@/components/inventory";
+import DownloadsSection from "@/components/DownloadSection";
 import Footer from "@/components/Footer";
 import ComingSoonCinematic from "@/components/commingSoon";
 
@@ -22,7 +22,7 @@ export default function Page() {
       <AttendanceFlowSection />
       <WalletSection />
       <TaskSection />
-      <InventorySection />
+      <DownloadsSection />
       <Footer />
     </main>
   );

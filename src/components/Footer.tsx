@@ -1,201 +1,162 @@
 "use client";
 
 import Link from "next/link";
-import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
-import { motion, useAnimation, Variants } from "framer-motion";
-import { useEffect, useState } from "react";
+import { Youtube, Instagram, Mail, MapPin } from "lucide-react";
 
 export default function Footer() {
-    const currentYear = new Date().getFullYear();
-
-    /* ---------------------------- ROTATING HEADER LOGIC ---------------------------- */
-
-    const phrases = ["Team", "Tuned", "TeamTuned"];
-    const [index, setIndex] = useState(0);
-    const [letters, setLetters] = useState<string[]>(phrases[0].split(""));
-
-    const controls = useAnimation();
-
-    // Parent variant for staggering
-    const parentVariant: Variants = {
-        hidden: {
-            transition: { staggerChildren: 0.05, staggerDirection: -1 },
-        },
-        visible: {
-            transition: { staggerChildren: 0.05, staggerDirection: 1 },
-        },
-    };
-
-    // Letter animation (smooth wipe)
-    const letterVariant: Variants = {
-        initial: {
-            opacity: 0,
-            clipPath: "inset(0 100% 0 0)", // hidden from right side
-            y: 8,
-        },
-        show: (i: number) => ({
-            opacity: 1,
-            clipPath: "inset(0 0% 0 0)",
-            y: 0,
-            transition: {
-                duration: 0.35,
-                ease: [0.3, 0.65, 0.3, 1],
-            },
-        }),
-        hide: (i: number) => ({
-            opacity: 0,
-            clipPath: "inset(0 100% 0 0)",
-            y: 8,
-            transition: {
-                duration: 0.28,
-                ease: [0.3, 0.6, 0.3, 1],
-            },
-        }),
-    };
-
-    useEffect(() => {
-        let active = true;
-
-        async function cycle() {
-            await controls.start("visible");              // reveal text
-            await new Promise((r) => setTimeout(r, 900)); // pause
-            await controls.start("hidden");               // hide text
-            await new Promise((r) => setTimeout(r, 200));
-
-            // update phrase
-            if (!active) return;
-            const next = (index + 1) % phrases.length;
-            setIndex(next);
-            setLetters(phrases[next].split(""));
-
-            // wait for DOM update
-            await new Promise((r) => setTimeout(r, 80));
-
-            controls.start("visible");
-        }
-
-        cycle();
-
-        return () => {
-            active = false;
-        };
-    }, [index]);
-
-    /* ---------------------------- FOOTER UI ---------------------------- */
+    const year = new Date().getFullYear();
 
     return (
-        <footer className="w-full bg-white text-black pt-20 pb-14">
+        <footer className="bg-gradient-to-b from-white to-gray-50 text-gray-600 border-t border-gray-200">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
 
-            {/* LEFT-ALIGNED BIG HEADING */}
-            <div className="max-w-7xl mx-auto px-6 mb-14">
-                <div className="flex flex-col">
-                    <motion.h1
-                        className="text-[60px] sm:text-[90px] md:text-[120px] font-extrabold leading-none text-left flex"
-                    >
-                        <motion.span
-                            initial="hidden"
-                            animate={controls}
-                            variants={parentVariant}
-                            className="flex"
-                        >
-                            {letters.map((ch, i) => (
-                                <motion.span
-                                    key={i}
-                                    custom={i}
-                                    variants={letterVariant}
-                                    initial="initial"
-                                    animate="show"
-                                    exit="hide"
-                                    className="inline-block"
-                                >
-                                    {ch}
-                                </motion.span>
-                            ))}
-                        </motion.span>
+                {/* Main Content Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
 
-                        {/* Cursor */}
-                        <span className="ml-1 w-1 bg-black rounded-sm animate-[blink_1s_steps(2,end)_infinite]" />
-                    </motion.h1>
-                </div>
-            </div>
+                    {/* Brand Section */}
+                    <div className="lg:col-span-7">
+                        <div className="flex flex-col sm:flex-row items-start gap-6">
+                            <img
+                                src="/LogoBlackText.png"
+                                alt="TeamTuned"
+                                className="h-20 sm:h-24 w-auto flex-shrink-0"
+                            />
 
-            {/* SOCIAL ICONS */}
-            <div className="max-w-7xl mx-auto px-6 mb-12">
-                <div className="flex gap-4">
-                    {[Facebook, Twitter, Linkedin, Instagram].map((Icon, i) => (
-                        <div
-                            key={i}
-                            className="w-12 h-12 rounded-full border border-black flex items-center justify-center hover:bg-black hover:text-white transition"
-                        >
-                            <Icon className="w-5 h-5" />
+                            <div className="space-y-5 flex-1">
+                                <p className="text-sm sm:text-base text-gray-600 max-w-xl leading-relaxed">
+                                    TeamTuned simplifies workforce operations—attendance, payroll,
+                                    payments, and staff management in one unified platform.
+                                </p>
+
+                                <div className="space-y-3 text-sm sm:text-base">
+                                    <div className="flex items-center gap-3 group">
+                                        <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                                            <Mail className="w-4 h-4 text-gray-600" />
+                                        </div>
+                                        <a
+                                            href="mailto:business@waardian.com"
+                                            className="text-gray-700 hover:text-gray-900 transition-colors"
+                                        >
+                                            business@waardian.com
+                                        </a>
+                                    </div>
+                                    <div className="flex items-center gap-3 group">
+                                        <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
+                                            <MapPin className="w-4 h-4 text-gray-600" />
+                                        </div>
+                                        <span className="text-gray-700">Pune, India</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* LINK GRID */}
-            <div className="max-w-7xl mx-auto px-6 grid grid-cols-2 sm:grid-cols-4 gap-12 mb-14 text-sm">
-                <div>
-                    <h3 className="font-semibold mb-3">Product</h3>
-                    <ul className="space-y-2 text-gray-600">
-                        <li>Security</li>
-                        <li>Support</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 className="font-semibold mb-3">Company</h3>
-                    <ul className="space-y-2 text-gray-600">
-                        <li>Introducing TeamTuned</li>
-                        <li>About</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 className="font-semibold mb-3">Resources</h3>
-                    <ul className="space-y-2 text-gray-600">
-                        <li>News</li>
-                        <li>Docs</li>
-                        <li>Media Kit</li>
-                    </ul>
-                </div>
-
-                <div>
-                    <h3 className="font-semibold mb-3">Language</h3>
-                    <div className="text-gray-600">English ▼</div>
-                </div>
-            </div>
-
-            {/* DOWNLOAD BUTTON */}
-            <div className="flex justify-center mb-12">
-                <button className="px-10 py-4 rounded-full bg-[#00C853] hover:bg-[#00b94d] transition shadow-[0_0_0_2px_black] flex items-center gap-3 text-lg font-medium">
-                    <div className="flex items-center gap-1">
-                        <span className="w-3 h-3 rounded-full bg-yellow-300"></span>
-                        <span className="w-3 h-3 rounded-full bg-blue-300"></span>
-                        <span className="w-3 h-3 rounded-full bg-purple-300"></span>
                     </div>
-                    Download TeamTuned
-                </button>
+
+                    {/* Quick Links Section */}
+                    <div className="lg:col-span-5">
+                        <div className="lg:ml-auto lg:max-w-xs">
+                            <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">
+                                Quick Links
+                            </h4>
+                            <ul className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-4">
+                                <li>
+                                    <Link
+                                        href="/privacy"
+                                        className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center group"
+                                    >
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-3 group-hover:bg-gray-900 transition-colors"></span>
+                                        Privacy Policy
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/terms"
+                                        className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center group"
+                                    >
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-3 group-hover:bg-gray-900 transition-colors"></span>
+                                        Terms and Conditions
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/contact"
+                                        className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center group"
+                                    >
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-3 group-hover:bg-gray-900 transition-colors"></span>
+                                        Contact Us
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href="/faq"
+                                        className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center group"
+                                    >
+                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-3 group-hover:bg-gray-900 transition-colors"></span>
+                                        FAQs
+                                    </Link>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Section */}
+                <div className="flex flex-col-reverse sm:flex-row justify-between items-center gap-6 sm:gap-4 pt-8 sm:pt-10 border-t border-gray-200">
+
+                    {/* Copyright */}
+                    <div className="text-xs sm:text-sm text-gray-500 text-center sm:text-left">
+                        <p className="font-medium">© {year} TeamTuned. All rights reserved.</p>
+                        <p className="mt-1.5">
+                            Powered by{" "}
+                            <a
+                                href="https://waardian.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-gray-700 hover:text-blue-600 transition-colors font-medium underline decoration-gray-400 hover:decoration-blue-600"
+                            >
+                                Waardian
+                            </a>
+                        </p>
+                    </div>
+
+                    {/* Social Media */}
+                    <div className="flex gap-3 sm:gap-4">
+                        {[
+                            { Icon: Youtube, href: "https://www.youtube.com/@teamtunedhq", color: "youtube", label: "YouTube" },
+                            { Icon: Instagram, href: "https://www.instagram.com/teamtuned?igsh=MW1nYnY0eGd2eDVsMw==", color: "instagram", label: "Instagram" }
+                        ].map((social, i) => (
+                            <a
+                                key={i}
+                                href={social.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                aria-label={social.label}
+                                className={`w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl transition-all duration-300 shadow-md hover:shadow-xl ${social.color === 'youtube'
+                                    ? 'bg-red-600 hover:bg-red-700 hover:scale-110 hover:-translate-y-1'
+                                    : 'bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 hover:scale-110 hover:-translate-y-1'
+                                    }`}
+                            >
+                                <social.Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                            </a>
+                        ))}
+                    </div>
+                </div>
             </div>
 
-            {/* TERMS ROW */}
-            <div className="flex justify-center gap-6 text-xs text-gray-500">
-                <div>Terms of use</div>
-                <div>Privacy policy</div>
-                <div>Cookie Preferences</div>
+            {/* Marquee Section */}
+            <div className="relative overflow-hidden border-t border-gray-200 bg-gradient-to-r from-gray-50 via-white to-gray-50">
+                <div className="relative py-6 sm:py-8 lg:py-10 overflow-hidden">
+                    <div className="flex animate-marquee whitespace-nowrap">
+                        {[...Array(20)].map((_, i) => (
+                            <span
+                                key={i}
+                                className="mx-6 sm:mx-8 md:mx-12 lg:mx-16 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text text-transparent"
+                            >
+                                TeamTuned .
+                            </span>
+                        ))}
+                    </div>
+                </div>
             </div>
-
-            {/* COPYRIGHT */}
-            <p className="text-center text-xs text-gray-400 mt-6">
-                © {currentYear} TeamTuned — A Waardian Product
-            </p>
-
-            <style>{`
-        @keyframes blink {
-          0%, 100% { opacity: 1 }
-          50% { opacity: 0 }
-        }
-      `}</style>
         </footer>
     );
 }
