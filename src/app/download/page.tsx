@@ -23,7 +23,7 @@ export default function DownloadPage() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-600 via-purple-600 to-blue-700 text-white flex items-center justify-center p-6">
+        <div className="min-h-screen bg-black text-white flex items-center justify-center p-6">
             <div className="text-center max-w-md">
                 {redirecting ? (
                     <>
@@ -31,7 +31,7 @@ export default function DownloadPage() {
                             <div className="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-white"></div>
                         </div>
                         <h1 className="text-3xl font-bold mb-3">Redirecting...</h1>
-                        <p className="text-blue-100">Taking you to the app store</p>
+                        <p className="text-gray-400">Taking you to the app store</p>
                     </>
                 ) : (
                     <>
@@ -42,7 +42,7 @@ export default function DownloadPage() {
                                 className="h-20 w-auto mx-auto mb-6"
                             />
                             <h1 className="text-3xl font-bold mb-3">Download TeamTuned</h1>
-                            <p className="text-blue-100 mb-8">
+                            <p className="text-gray-400 mb-8">
                                 {deviceType === 'web'
                                     ? 'Choose your platform to download the app'
                                     : 'If the redirect didn\'t work, tap the button below'}
@@ -54,7 +54,7 @@ export default function DownloadPage() {
                                 href={APP_STORE_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block w-full px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+                                className="block w-full px-8 py-4 bg-white text-black rounded-xl font-semibold hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg"
                             >
                                 📱 Download on App Store
                             </a>
@@ -62,14 +62,14 @@ export default function DownloadPage() {
                                 href={PLAY_STORE_URL}
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="block w-full px-8 py-4 bg-white text-gray-900 rounded-xl font-semibold hover:bg-gray-100 transition-all transform hover:scale-105 shadow-lg"
+                                className="block w-full px-8 py-4 bg-white text-black rounded-xl font-semibold hover:bg-gray-200 transition-all transform hover:scale-105 shadow-lg"
                             >
                                 🤖 Get it on Google Play
                             </a>
                         </div>
 
-                        <p className="mt-8 text-sm text-blue-200">
-                            Detected device: <span className="font-semibold">{deviceType === 'ios' ? 'iOS' : deviceType === 'android' ? 'Android' : 'Desktop'}</span>
+                        <p className="mt-8 text-sm text-gray-500">
+                            Detected device: <span className="font-semibold text-gray-300">{deviceType === 'ios' ? 'iOS' : deviceType === 'android' ? 'Android' : 'Desktop'}</span>
                         </p>
                     </>
                 )}

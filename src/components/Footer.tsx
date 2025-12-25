@@ -1,51 +1,97 @@
 "use client";
 
 import Link from "next/link";
-import { Youtube, Instagram, Mail, MapPin } from "lucide-react";
+import { Youtube, Instagram, Mail, MapPin, ArrowUpRight } from "lucide-react";
+import { useEffect, useRef } from "react";
 
 export default function Footer() {
     const year = new Date().getFullYear();
+    const pathRef = useRef<SVGPathElement>(null);
+
+    useEffect(() => {
+        const handleScroll = () => {
+            if (pathRef.current) {
+                const scrollY = window.scrollY;
+                const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+                const scrollProgress = Math.min(scrollY / maxScroll, 1);
+
+                // Create wave effect based on scroll
+                const bendAmount = 100 - (scrollProgress * 40); // Bends from 100 to 60
+                const newPath = `M 50 100 Q 350 ${bendAmount} 700 100 T 1350 100`;
+
+                pathRef.current.setAttribute('d', newPath);
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll);
+        handleScroll(); // Initial call
+
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
+
+    const quickLinks = [
+        { href: "/privacy", label: "Privacy" },
+        { href: "/terms", label: "Terms" },
+        { href: "/contact", label: "Contact" },
+        { href: "/faq", label: "FAQs" }
+    ];
+
+    const socialLinks = [
+        {
+            Icon: Youtube,
+            href: "https://www.youtube.com/@teamtunedhq",
+            label: "YouTube",
+            gradient: "from-red-500 to-red-600"
+        },
+        {
+            Icon: Instagram,
+            href: "https://www.instagram.com/teamtuned?igsh=MW1nYnY0eGd2eDVsMw==",
+            label: "Instagram",
+            gradient: "from-purple-500 via-pink-500 to-orange-500"
+        }
+    ];
 
     return (
-        <footer className="bg-gradient-to-b from-white to-gray-50 text-gray-600 border-t border-gray-200">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-16 lg:py-20">
+        <footer className="relative bg-gradient-to-b from-slate-50 to-white border-t border-slate-200/60">
+            {/* Main Footer Content */}
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-10">
 
-                {/* Main Content Grid */}
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-12">
+                {/* Top Section - Brand & Links */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-12 mb-8">
 
                     {/* Brand Section */}
                     <div className="lg:col-span-7">
-                        <div className="flex flex-col sm:flex-row items-start gap-6">
+                        <div className="space-y-5">
+                            {/* Logo */}
                             <img
                                 src="/LogoBlackText.png"
                                 alt="TeamTuned"
-                                className="h-20 sm:h-24 w-auto flex-shrink-0"
+                                className="h-14 w-auto"
                             />
 
-                            <div className="space-y-5 flex-1">
-                                <p className="text-sm sm:text-base text-gray-600 max-w-xl leading-relaxed">
-                                    TeamTuned simplifies workforce operations—attendance, payroll,
-                                    payments, and staff management in one unified platform.
-                                </p>
+                            {/* Tagline */}
+                            <p className="text-sm text-slate-600 max-w-md leading-relaxed">
+                                Simplifying workforce operations—attendance, payroll, payments,
+                                and staff management in one unified platform.
+                            </p>
 
-                                <div className="space-y-3 text-sm sm:text-base">
-                                    <div className="flex items-center gap-3 group">
-                                        <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                                            <Mail className="w-4 h-4 text-gray-600" />
-                                        </div>
-                                        <a
-                                            href="mailto:business@waardian.com"
-                                            className="text-gray-700 hover:text-gray-900 transition-colors"
-                                        >
-                                            business@waardian.com
-                                        </a>
+                            {/* Contact Info */}
+                            <div className="flex flex-col sm:flex-row gap-4 text-sm">
+                                <a
+                                    href="mailto:business@waardian.com"
+                                    className="group flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
+                                >
+                                    <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-slate-200 transition-all group-hover:scale-105">
+                                        <Mail className="w-4 h-4" />
                                     </div>
-                                    <div className="flex items-center gap-3 group">
-                                        <div className="w-9 h-9 rounded-lg bg-gray-100 flex items-center justify-center group-hover:bg-gray-200 transition-colors">
-                                            <MapPin className="w-4 h-4 text-gray-600" />
-                                        </div>
-                                        <span className="text-gray-700">Pune, India</span>
+                                    <span className="font-medium">business@waardian.com</span>
+                                </a>
+
+                                <div className="flex items-center gap-2 text-slate-600">
+                                    <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center">
+                                        <MapPin className="w-4 h-4" />
                                     </div>
+                                    <span className="font-medium">Pune, India</span>
                                 </div>
                             </div>
                         </div>
@@ -54,64 +100,41 @@ export default function Footer() {
                     {/* Quick Links Section */}
                     <div className="lg:col-span-5">
                         <div className="lg:ml-auto lg:max-w-xs">
-                            <h4 className="text-base sm:text-lg font-semibold text-gray-900 mb-4 sm:mb-6">
+                            <h4 className="text-sm font-semibold text-slate-900 mb-4 tracking-wide uppercase">
                                 Quick Links
                             </h4>
-                            <ul className="grid grid-cols-2 sm:grid-cols-1 gap-3 sm:gap-4">
-                                <li>
-                                    <Link
-                                        href="/privacy"
-                                        className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center group"
-                                    >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-3 group-hover:bg-gray-900 transition-colors"></span>
-                                        Privacy Policy
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/terms"
-                                        className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center group"
-                                    >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-3 group-hover:bg-gray-900 transition-colors"></span>
-                                        Terms and Conditions
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/contact"
-                                        className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center group"
-                                    >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-3 group-hover:bg-gray-900 transition-colors"></span>
-                                        Contact Us
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href="/faq"
-                                        className="text-sm sm:text-base text-gray-600 hover:text-gray-900 transition-colors inline-flex items-center group"
-                                    >
-                                        <span className="w-1.5 h-1.5 rounded-full bg-gray-400 mr-3 group-hover:bg-gray-900 transition-colors"></span>
-                                        FAQs
-                                    </Link>
-                                </li>
+                            <ul className="grid grid-cols-2 gap-3">
+                                {quickLinks.map((link) => (
+                                    <li key={link.href}>
+                                        <Link
+                                            href={link.href}
+                                            className="group inline-flex items-center gap-1.5 text-sm text-slate-600 hover:text-slate-900 transition-colors"
+                                        >
+                                            <span className="relative">
+                                                {link.label}
+                                                <span className="absolute -bottom-0.5 left-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-500 group-hover:w-full transition-all duration-300"></span>
+                                            </span>
+                                            <ArrowUpRight className="w-3 h-3 opacity-0 -translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all" />
+                                        </Link>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                {/* Bottom Section */}
-                <div className="flex flex-col-reverse sm:flex-row justify-between items-center gap-6 sm:gap-4 pt-8 sm:pt-10 border-t border-gray-200">
+                {/* Bottom Section - Copyright & Social */}
+                <div className="flex flex-col-reverse sm:flex-row justify-between items-center gap-6 pt-6 border-t border-slate-200/60">
 
                     {/* Copyright */}
-                    <div className="text-xs sm:text-sm text-gray-500 text-center sm:text-left">
-                        <p className="font-medium">© {year} TeamTuned. All rights reserved.</p>
-                        <p className="mt-1.5">
-                            Powered by{" "}
+                    <div className="text-xs text-slate-500 text-center sm:text-left">
+                        <p>
+                            © {year} TeamTuned. All rights reserved. Powered by{" "}
                             <a
                                 href="https://waardian.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                className="text-gray-700 hover:text-blue-600 transition-colors font-medium underline decoration-gray-400 hover:decoration-blue-600"
+                                className="text-slate-700 hover:text-blue-600 transition-colors font-medium"
                             >
                                 Waardian
                             </a>
@@ -119,44 +142,25 @@ export default function Footer() {
                     </div>
 
                     {/* Social Media */}
-                    <div className="flex gap-3 sm:gap-4">
-                        {[
-                            { Icon: Youtube, href: "https://www.youtube.com/@teamtunedhq", color: "youtube", label: "YouTube" },
-                            { Icon: Instagram, href: "https://www.instagram.com/teamtuned?igsh=MW1nYnY0eGd2eDVsMw==", color: "instagram", label: "Instagram" }
-                        ].map((social, i) => (
+                    <div className="flex gap-3">
+                        {socialLinks.map((social) => (
                             <a
-                                key={i}
+                                key={social.label}
                                 href={social.href}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label={social.label}
-                                className={`w-11 h-11 sm:w-12 sm:h-12 flex items-center justify-center rounded-xl transition-all duration-300 shadow-md hover:shadow-xl ${social.color === 'youtube'
-                                    ? 'bg-red-600 hover:bg-red-700 hover:scale-110 hover:-translate-y-1'
-                                    : 'bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 hover:scale-110 hover:-translate-y-1'
-                                    }`}
+                                className="w-10 h-10 flex items-center justify-center rounded-xl bg-slate-900 hover:bg-white border-2 border-slate-900 shadow-sm hover:shadow-md transition-all duration-300 hover:scale-110 hover:-translate-y-0.5 group"
                             >
-                                <social.Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
+                                <social.Icon className="w-5 h-5 text-white group-hover:text-slate-900 transition-colors duration-300" />
                             </a>
                         ))}
                     </div>
                 </div>
             </div>
 
-            {/* Marquee Section */}
-            <div className="relative overflow-hidden border-t border-gray-200 bg-gradient-to-r from-gray-50 via-white to-gray-50">
-                <div className="relative py-6 sm:py-8 lg:py-10 overflow-hidden">
-                    <div className="flex animate-marquee whitespace-nowrap">
-                        {[...Array(20)].map((_, i) => (
-                            <span
-                                key={i}
-                                className="mx-6 sm:mx-8 md:mx-12 lg:mx-16 text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 bg-clip-text text-transparent"
-                            >
-                                TeamTuned .
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            </div>
+            {/* Large Static Text with Bend Effect - Osmo Style */}
+
         </footer>
     );
 }

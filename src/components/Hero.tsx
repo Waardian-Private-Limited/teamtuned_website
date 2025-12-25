@@ -67,7 +67,7 @@ function ElegantText() {
 
 function CTASection() {
   return (
-    <button className="mt-8 sm:mt-10 px-12 py-4 rounded-lg bg-black text-white hover:scale-105 transition">
+    <button className="mt-8 sm:mt-10 px-12 py-4 rounded-lg bg-black text-white hover:scale-105 transition" onClick={() => window.location.href = "/contact"}>
       Book a Demo →
     </button>
   );

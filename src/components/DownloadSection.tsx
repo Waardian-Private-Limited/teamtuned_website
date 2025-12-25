@@ -109,15 +109,14 @@ export default function DownloadsSection() {
                             className="text-4xl sm:text-5xl xl:text-6xl font-semibold leading-tight"
                             variants={headingVariants}
                         >
-                            ONE APP <br />
-                            <span className="font-black">FULL ACCESS</span>
+                            Download Now
                         </motion.h2>
 
                         <motion.p
                             className="text-zinc-400 max-w-lg mx-auto"
                             variants={textVariants}
                         >
-                            Attendance, payroll, cards, and payments — unified into one modern,
+                            Attendance, payroll, cards, and payments unified into one moden,
                             secure workforce platform.
                         </motion.p>
 
