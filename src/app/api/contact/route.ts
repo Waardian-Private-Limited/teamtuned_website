@@ -4,7 +4,7 @@ export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
 
-        const response = await fetch('https://api.waardian.com/leads', {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/contact/submit`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
