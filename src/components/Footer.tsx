@@ -78,13 +78,13 @@ export default function Footer() {
                             {/* Contact Info */}
                             <div className="flex flex-col sm:flex-row gap-4 text-sm">
                                 <a
-                                    href="mailto:business@waardian.com"
+                                    href="mailto:business@teamtuned.com"
                                     className="group flex items-center gap-2 text-slate-600 hover:text-slate-900 transition-colors"
                                 >
                                     <div className="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center group-hover:bg-slate-200 transition-all group-hover:scale-105">
                                         <Mail className="w-4 h-4" />
                                     </div>
-                                    <span className="font-medium">business@waardian.com</span>
+                                    <span className="font-medium">business@teamtuned.com</span>
                                 </a>
 
                                 <div className="flex items-center gap-2 text-slate-600">

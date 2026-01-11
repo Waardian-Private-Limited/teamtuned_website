@@ -196,7 +196,7 @@ export default function PrivacyPage() {
                                 <li><strong>Objection:</strong> You can object to processing of your personal data</li>
                             </ul>
                             <p className="text-gray-700 leading-relaxed mb-4">
-                                To exercise these rights, please contact us at business@waardian.com
+                                To exercise these rights, please contact us at business@teamtuned.com
                             </p>
                         </section>
 
@@ -233,7 +233,7 @@ export default function PrivacyPage() {
                                 If you have any questions about this Privacy Policy, please contact us:
                             </p>
                             <p className="text-gray-700">
-                                Email: <a href="mailto:business@waardian.com" className="text-blue-600 hover:underline">business@waardian.com</a>
+                                Email: <a href="mailto:business@teamtuned.com" className="text-blue-600 hover:underline">business@teamtuned.com</a>
                             </p>
                         </section>
                     </div>

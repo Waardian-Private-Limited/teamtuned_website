@@ -233,7 +233,7 @@ export default function Header() {
                 transition={{ delay: 1.3, duration: 1.2 }}
                 className="absolute bottom-8 sm:bottom-12 left-6 sm:left-10 md:left-20 text-white text-xs sm:text-sm uppercase tracking-widest"
               >
-                business@waardian.com
+                business@teamtuned.com
               </motion.div>
             </div>
           </motion.div>

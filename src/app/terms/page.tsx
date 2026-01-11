@@ -115,7 +115,7 @@ export default function TermsPage() {
                                 If you have any questions about these Terms, please contact us at:
                             </p>
                             <p className="text-gray-700">
-                                Email: <a href="mailto:business@waardian.com" className="text-blue-600 hover:underline">business@waardian.com</a>
+                                Email: <a href="mailto:business@teamtuned.com" className="text-blue-600 hover:underline">business@teamtuned.com</a>
                             </p>
                         </section>
                     </div>

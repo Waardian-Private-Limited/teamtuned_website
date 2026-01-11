@@ -33,7 +33,7 @@ export default function ContactPage() {
         setError("");
 
         try {
-            const response = await fetch("/api/contact", {
+            const response = await fetch("/api/v1/contact/submit", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -188,8 +188,8 @@ export default function ContactPage() {
                             </button>
 
                             <p className="text-center">
-                                <a href="mailto:business@waardian.com" className="text-gray-500 hover:text-black transition-colors text-sm">
-                                    business@waardian.com
+                                <a href="mailto:business@teamtuned.com" className="text-gray-500 hover:text-black transition-colors text-sm">
+                                    business@teamtuned.com
                                 </a>
                             </p>
                         </div>
