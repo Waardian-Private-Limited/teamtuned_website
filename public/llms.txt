@@ -10,22 +10,22 @@
 
 ## Product
 
-- [Face recognition attendance](https://teamtuned.com/face-recognition-attendance): face match, liveness, location and registered phone on every check-in; mock-location apps blocked
-- [Geofence attendance](https://teamtuned.com/geofence-attendance): six location rules per employee, from assigned sites only to open check-in for remote staff
-- [Field force tracking](https://teamtuned.com/field-force-tracking): live map, day timeline, visits with photos and notes; runs only under a tracking policy
-- [Attendance and payroll](https://teamtuned.com/attendance-payroll): payable days, overtime, advances, reimbursements and your deduction and tax rules in one pay run
-- [Leave management](https://teamtuned.com/leave-management): policy-driven credits, expiry, carry forward, encashment, comp-off, holidays per site and approvals
-- [Shift roster](https://teamtuned.com/shift-roster): rosters generated from rest, off-day and staffing rules, published to the app, with swap approvals
-- [Task management](https://teamtuned.com/task-management): tasks with photo, checklist and location proof, reviews, reminders and meeting action items
+- [Face recognition attendance](https://www.teamtuned.com/face-recognition-attendance): face match, liveness, location and registered phone on every check-in; mock-location apps blocked
+- [Geofence attendance](https://www.teamtuned.com/geofence-attendance): six location rules per employee, from assigned sites only to open check-in for remote staff
+- [Field force tracking](https://www.teamtuned.com/field-force-tracking): live map, day timeline, visits with photos and notes; runs only under a tracking policy
+- [Attendance and payroll](https://www.teamtuned.com/attendance-payroll): payable days, overtime, advances, reimbursements and your deduction and tax rules in one pay run
+- [Leave management](https://www.teamtuned.com/leave-management): policy-driven credits, expiry, carry forward, encashment, comp-off, holidays per site and approvals
+- [Shift roster](https://www.teamtuned.com/shift-roster): rosters generated from rest, off-day and staffing rules, published to the app, with swap approvals
+- [Task management](https://www.teamtuned.com/task-management): tasks with photo, checklist and location proof, reviews, reminders and meeting action items
 
 ## Guides
 
-- [Guides](https://teamtuned.com/guides): how to choose leave, payroll and roster software, how per-employee HRMS pricing works, and moving off spreadsheets
+- [Guides](https://www.teamtuned.com/guides): how to choose leave, payroll and roster software, how per-employee HRMS pricing works, and moving off spreadsheets
 
 ## Company
 
-- [Pricing](https://teamtuned.com/pricing)
-- [Security](https://teamtuned.com/security)
-- [About](https://teamtuned.com/about)
-- [Contact](https://teamtuned.com/contact)
-- [Privacy policy](https://teamtuned.com/privacy)
+- [Pricing](https://www.teamtuned.com/pricing)
+- [Security](https://www.teamtuned.com/security)
+- [About](https://www.teamtuned.com/about)
+- [Contact](https://www.teamtuned.com/contact)
+- [Privacy policy](https://www.teamtuned.com/privacy)

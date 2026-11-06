@@ -1,5 +1,5 @@
 // One place for brand facts, links and SEO copy. Env values are public by design.
-export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://teamtuned.com').replace(/\/$/, '');
+export const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL || 'https://www.teamtuned.com').replace(/\/$/, '');
 export const APP_URL = (process.env.NEXT_PUBLIC_APP_URL || 'https://app.teamtuned.com').replace(/\/$/, '');
 export const API_BASE = (process.env.NEXT_PUBLIC_API_BASE || 'https://api.teamtuned.com/v2/api/v1').replace(/\/$/, '');
 

@@ -25,11 +25,9 @@ const nextConfig: NextConfig = {
       { source: '/brand/(.*)', headers: [{ key: 'Cache-Control', value: 'public, max-age=86400, stale-while-revalidate=604800' }] },
     ];
   },
-  // One host: www is sent to the apex, which every canonical, the sitemap and NEXT_PUBLIC_SITE_URL use.
-  // (Only takes effect if www traffic reaches this app; otherwise set the same 301 at the DNS/CDN.)
+  // The host redirect (teamtuned.com -> www.teamtuned.com) is Vercel's domain setting; never add one here, or the two loop.
   async redirects() {
     return [
-      { source: '/:path*', has: [{ type: 'host', value: 'www.teamtuned.com' }], destination: 'https://teamtuned.com/:path*', permanent: true },
       // Pages of the previous site that printed QR codes, emails and old links still point at.
       { source: '/download', destination: '/#download', permanent: false },
       { source: '/book-demo', destination: '/#demo', permanent: false },
