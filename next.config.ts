@@ -28,7 +28,14 @@ const nextConfig: NextConfig = {
   // One host: www is sent to the apex, which every canonical, the sitemap and NEXT_PUBLIC_SITE_URL use.
   // (Only takes effect if www traffic reaches this app; otherwise set the same 301 at the DNS/CDN.)
   async redirects() {
-    return [{ source: '/:path*', has: [{ type: 'host', value: 'www.teamtuned.com' }], destination: 'https://teamtuned.com/:path*', permanent: true }];
+    return [
+      { source: '/:path*', has: [{ type: 'host', value: 'www.teamtuned.com' }], destination: 'https://teamtuned.com/:path*', permanent: true },
+      // Pages of the previous site that printed QR codes, emails and old links still point at.
+      { source: '/download', destination: '/#download', permanent: false },
+      { source: '/book-demo', destination: '/#demo', permanent: false },
+      { source: '/demo', destination: '/#demo', permanent: false },
+      { source: '/faq', destination: '/#faq', permanent: false },
+    ];
   },
 };
 

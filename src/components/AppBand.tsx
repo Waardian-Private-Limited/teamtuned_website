@@ -12,7 +12,7 @@ export function AppBand() {
     { src: '/screens/phone-payslip.webp', alt: 'Payslip screen with net pay and deductions', cls: 'absolute right-0 top-[10%] w-[34%] rotate-[8deg] opacity-95' },
   ];
   return (
-    <section aria-labelledby="apps-title" className="relative overflow-hidden bg-white py-24 sm:py-32 screen-fit">
+    <section id="download" aria-labelledby="apps-title" className="relative overflow-hidden bg-white py-24 sm:py-32 screen-fit">
       <Container>
         <div className="grid items-center gap-14 lg:grid-cols-[1fr_1.1fr]">
           <div>
