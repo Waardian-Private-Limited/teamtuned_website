@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence, Variants } from "framer-motion";
 import Link from "next/link";
 
@@ -8,7 +8,7 @@ const navLinks = [
   { label: "Home", path: "/" },
   { label: "Features", path: "/#features" },
   { label: "FAQ", path: "/faq" },
-  { label: "Contact", path: "/contact" },
+  { label: "Book Demo", path: "/book-demo" },
 ];
 
 export default function Header() {
@@ -16,6 +16,18 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [hideLogoOnMobile, setHideLogoOnMobile] = useState(false);
   const [isOverDownloadSection, setIsOverDownloadSection] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const openMenu = () => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setOpen(true);
+  };
+
+  const closeMenu = () => {
+    timerRef.current = setTimeout(() => {
+      setOpen(false);
+    }, 200);
+  };
 
   // Preload both logo images for smooth transitions
   useEffect(() => {
@@ -151,46 +163,52 @@ export default function Header() {
             />
           </Link>
 
-          {/* MENU BUTTON */}
-          <motion.button
-            onClick={() => setOpen(!open)}
-            className={`relative h-12 w-12 sm:h-14 sm:w-14 flex items-center justify-center rounded-full transition-all duration-300
-            ${scrolled ? "bg-black/90 hover:bg-black/90" : "bg-black/50 backdrop-blur-md hover:bg-black/90"}
-            `}
-            whileHover={{ scale: 1.12 }}
-            whileTap={{ scale: 0.95 }}
-            transition={{ duration: 0.4, ease }}
-            aria-label="Toggle menu"
-          >
-            {/* HAMBURGER */}
-            <motion.div
-              animate={{ opacity: open ? 0 : 1, rotate: open ? -90 : 0 }}
-              transition={{ duration: 0.5, ease }}
-              className="absolute flex flex-col gap-1.5"
-            >
-              <span className="block w-8 sm:w-9 h-1 rounded-full bg-white"></span>
-              <span className="block w-6 sm:w-7 h-1 rounded-full bg-white"></span>
-              <span className="block w-7 sm:w-8 h-1 rounded-full bg-white"></span>
-            </motion.div>
 
-            {/* CROSS */}
-            <motion.svg
-              width="28"
-              height="28"
-              viewBox="0 0 28 28"
-              fill="none"
-              animate={{ opacity: open ? 1 : 0, rotate: open ? 0 : 45 }}
-              transition={{ duration: 0.5, ease }}
-              className="absolute"
+          <div className="flex items-center gap-4">
+
+            {/* MENU BUTTON */}
+            <motion.button
+              onClick={() => setOpen(!open)}
+              onMouseEnter={openMenu}
+              onMouseLeave={closeMenu}
+              className={`relative h-12 w-12 sm:h-14 sm:w-14 flex items-center justify-center rounded-full transition-all duration-300
+              ${scrolled ? "bg-black/90 hover:bg-black/90" : "bg-black/50 backdrop-blur-md hover:bg-black/90"}
+              `}
+              whileHover={{ scale: 1.12 }}
+              whileTap={{ scale: 0.95 }}
+              transition={{ duration: 0.4, ease }}
+              aria-label="Toggle menu"
             >
-              <path
-                d="M6 6L22 22M22 6L6 22"
-                stroke="white"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-            </motion.svg>
-          </motion.button>
+              {/* HAMBURGER */}
+              <motion.div
+                animate={{ opacity: open ? 0 : 1, rotate: open ? -90 : 0 }}
+                transition={{ duration: 0.5, ease }}
+                className="absolute flex flex-col gap-1.5"
+              >
+                <span className="block w-8 sm:w-9 h-1 rounded-full bg-white"></span>
+                <span className="block w-6 sm:w-7 h-1 rounded-full bg-white"></span>
+                <span className="block w-7 sm:w-8 h-1 rounded-full bg-white"></span>
+              </motion.div>
+
+              {/* CROSS */}
+              <motion.svg
+                width="28"
+                height="28"
+                viewBox="0 0 28 28"
+                fill="none"
+                animate={{ opacity: open ? 1 : 0, rotate: open ? 0 : 45 }}
+                transition={{ duration: 0.5, ease }}
+                className="absolute"
+              >
+                <path
+                  d="M6 6L22 22M22 6L6 22"
+                  stroke="white"
+                  strokeWidth="4"
+                  strokeLinecap="round"
+                />
+              </motion.svg>
+            </motion.button>
+          </div>
         </div>
       </motion.header>
 
@@ -202,7 +220,9 @@ export default function Header() {
             initial="hidden"
             animate="visible"
             exit="exit"
-            className="fixed inset-0 bg-gradient-to-br from-blue-600 via-purple-600 to-blue-700 z-[150]"
+            className="fixed inset-0 bg-black z-[150]"
+            onMouseEnter={openMenu}
+            onMouseLeave={closeMenu}
           >
             <div className="h-full flex flex-col justify-center px-6 sm:px-10 md:px-20">
               <motion.div

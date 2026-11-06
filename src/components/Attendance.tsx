@@ -97,63 +97,78 @@ export default function AttendanceFlowSection() {
     ].filter(Boolean) as SVGPathElement[];
 
     const ctx = gsap.context(() => {
-      gsap.set(mainCardRef.current, { opacity: 0, y: 80, scale: 0.9 });
-      gsap.set(cards, { opacity: 0, scale: 0.8, y: 40 });
-      gsap.set(textItems, { opacity: 0, y: 15 });
+      let mm = gsap.matchMedia();
 
-      // hide arrows initially
-      arrows.forEach((arrow) => {
-        const len = arrow.getTotalLength();
-        gsap.set(arrow, {
-          strokeDasharray: len,
-          strokeDashoffset: len,
-          opacity: 0,
+      // Helper function to build the timeline
+      const buildTimeline = (scrollEnd: string) => {
+        gsap.set(mainCardRef.current, { opacity: 0, y: 80, scale: 0.9 });
+        gsap.set(cards, { opacity: 0, scale: 0.8, y: 40 });
+        gsap.set(textItems, { opacity: 0, y: 15 });
+
+        // hide arrows initially
+        arrows.forEach((arrow) => {
+          const len = arrow.getTotalLength();
+          gsap.set(arrow, {
+            strokeDasharray: len,
+            strokeDashoffset: len,
+            opacity: 0,
+          });
         });
-      });
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: containerRef.current,
-          start: "top top",
-          end: "+=2400",
-          scrub: 1.4,
-          pin: true,
-        },
-      });
-
-      tl.to(mainCardRef.current, {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        duration: 1.3,
-        ease: "power3.out",
-      });
-
-      tl.to(cards, {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration: 1.1,
-        stagger: 0.15,
-        ease: "power2.out",
-      });
-
-      // reveal text content
-      textItems.forEach((el, index) => {
-        tl.to(el, { opacity: 1, y: 0, duration: 0.7 }, 1.2 + index * 0.1);
-      });
-
-      arrows.forEach((arrow, index) => {
-        tl.to(
-          arrow,
-          {
-            strokeDashoffset: 0,
-            opacity: 1,
-            duration: 1.1,
-            ease: "power2.inOut",
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top top",
+            end: scrollEnd,
+            scrub: 1.4,
+            pin: true,
           },
-          1.5 + index * 0.25
-        );
+        });
+
+        tl.to(mainCardRef.current, {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          duration: 1.3,
+          ease: "power3.out",
+        });
+
+        tl.to(cards, {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+          duration: 1.1,
+          stagger: 0.15,
+          ease: "power2.out",
+        });
+
+        // reveal text content
+        textItems.forEach((el, index) => {
+          tl.to(el, { opacity: 1, y: 0, duration: 0.7 }, 1.2 + index * 0.1);
+        });
+
+        arrows.forEach((arrow, index) => {
+          tl.to(
+            arrow,
+            {
+              strokeDashoffset: 0,
+              opacity: 1,
+              duration: 1.1,
+              ease: "power2.inOut",
+            },
+            1.5 + index * 0.25
+          );
+        });
+      };
+
+      // Desktop: Standard Speed
+      mm.add("(min-width: 769px)", () => {
+        buildTimeline("+=2400");
+      });
+
+      // Mobile: Faster Speed (Less scroll distance)
+      mm.add("(max-width: 768px)", () => {
+        buildTimeline("+=1200");
       });
     }, containerRef);
 

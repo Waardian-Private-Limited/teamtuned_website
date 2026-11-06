@@ -173,15 +173,19 @@
   0% {
     transform: translateX(0);
   }
+
   100% {
     transform: translateX(-50%);
   }
 }
 
 @keyframes footerBend {
-  0%, 100% {
+
+  0%,
+  100% {
     d: path("M 50 100 Q 300 100 600 100 T 1150 100");
   }
+
   50% {
     d: path("M 50 100 Q 300 80 600 100 T 1150 100");
   }
