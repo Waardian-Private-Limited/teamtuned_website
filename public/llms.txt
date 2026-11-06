@@ -1,0 +1,31 @@
+# TeamTuned
+
+> TeamTuned is a proof-of-work HRMS (human resource management system) made by Waardian Private Limited. It verifies attendance with face recognition, a liveness check, geofencing and a registered phone, and runs shifts and rosters, leave, payroll, live field tracking, approvals, expenses, recruitment, onboarding, performance, tasks and site reports on the same verified data, on web, Android and iOS.
+
+- Platforms: web app for managers and HR; employee app for Android and iPhone (iOS 16 or later)
+- Employee app languages: English, Hindi, Marathi, Gujarati, Kannada and Telugu
+- Modules: 18, switched on per account
+- Pricing: per active employee and the modules you use; inactive and exited employees don't use a licence. Book a demo for a quote, then a free trial. No prices are published.
+- Contact: business@teamtuned.com
+
+## Product
+
+- [Face recognition attendance](https://teamtuned.com/face-recognition-attendance): face match, liveness, location and registered phone on every check-in; mock-location apps blocked
+- [Geofence attendance](https://teamtuned.com/geofence-attendance): six location rules per employee, from assigned sites only to open check-in for remote staff
+- [Field force tracking](https://teamtuned.com/field-force-tracking): live map, day timeline, visits with photos and notes; runs only under a tracking policy
+- [Attendance and payroll](https://teamtuned.com/attendance-payroll): payable days, overtime, advances, reimbursements and your deduction and tax rules in one pay run
+- [Leave management](https://teamtuned.com/leave-management): policy-driven credits, expiry, carry forward, encashment, comp-off, holidays per site and approvals
+- [Shift roster](https://teamtuned.com/shift-roster): rosters generated from rest, off-day and staffing rules, published to the app, with swap approvals
+- [Task management](https://teamtuned.com/task-management): tasks with photo, checklist and location proof, reviews, reminders and meeting action items
+
+## Guides
+
+- [Guides](https://teamtuned.com/guides): how to choose leave, payroll and roster software, how per-employee HRMS pricing works, and moving off spreadsheets
+
+## Company
+
+- [Pricing](https://teamtuned.com/pricing)
+- [Security](https://teamtuned.com/security)
+- [About](https://teamtuned.com/about)
+- [Contact](https://teamtuned.com/contact)
+- [Privacy policy](https://teamtuned.com/privacy)

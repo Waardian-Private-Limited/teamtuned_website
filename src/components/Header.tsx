@@ -1,264 +1,163 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
-import Link from "next/link";
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
+import { AnimatePresence, m } from 'framer-motion';
+import { Menu, X } from 'lucide-react';
+import { APP_URL, nav } from '@/lib/site';
+import { Logo, cx } from './ui';
 
-const navLinks = [
-  { label: "Home", path: "/" },
-  { label: "Features", path: "/#features" },
-  { label: "FAQ", path: "/faq" },
-  { label: "Book Demo", path: "/book-demo" },
-];
-
-export default function Header() {
-  const [open, setOpen] = useState(false);
+/** Sticky header. Starts transparent over the dark hero, turns into a white glass bar once scrolled. */
+export function Header({ overDark = true }: { overDark?: boolean }) {
   const [scrolled, setScrolled] = useState(false);
-  const [hideLogoOnMobile, setHideLogoOnMobile] = useState(false);
-  const [isOverDownloadSection, setIsOverDownloadSection] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const [open, setOpen] = useState(false);
+  const [active, setActive] = useState<string | null>(null);
+  const pathname = usePathname();
 
-  const openMenu = () => {
-    if (timerRef.current) clearTimeout(timerRef.current);
-    setOpen(true);
-  };
-
-  const closeMenu = () => {
-    timerRef.current = setTimeout(() => {
-      setOpen(false);
-    }, 200);
-  };
-
-  // Preload both logo images for smooth transitions
+  // Scroll spy: the section crossing the middle of the screen decides the active nav item.
+  // Sections outside the nav (hero, managers, demo…) clear it.
   useEffect(() => {
-    const preloadImages = ["/LogoBlackText.png", "/LogoWhiteText.png"];
-    preloadImages.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
+    if (pathname !== '/') return;
+    let raf = 0;
+    const update = () => {
+      raf = 0;
+      const mid = window.innerHeight / 2;
+      const sec = Array.from(document.querySelectorAll<HTMLElement>('main > section, main > div')).find((el) => {
+        const r = el.getBoundingClientRect();
+        return r.top <= mid && r.bottom > mid;
+      });
+      setActive(sec?.id || null);
+    };
+    const onScroll = () => {
+      if (!raf) raf = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+    };
+  }, [pathname]);
+
+  useEffect(() => {
+    const on = () => setScrolled(window.scrollY > 24);
+    on();
+    window.addEventListener('scroll', on, { passive: true });
+    return () => window.removeEventListener('scroll', on);
   }, []);
 
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "unset";
+    document.documentElement.style.overflow = open ? 'hidden' : '';
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
   }, [open]);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Intersection Observer for footer visibility on mobile
-  useEffect(() => {
-    const footer = document.querySelector('footer');
-    if (!footer) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          // Only hide logo on mobile (screens smaller than 640px)
-          if (window.innerWidth < 640) {
-            setHideLogoOnMobile(entry.isIntersecting);
-          }
-        });
-      },
-      {
-        threshold: 0.1,
-      }
-    );
-
-    observer.observe(footer);
-
-    // Also handle window resize
-    const handleResize = () => {
-      if (window.innerWidth >= 640) {
-        setHideLogoOnMobile(false);
-      }
-    };
-
-    window.addEventListener('resize', handleResize);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
-
-  // Optimized Intersection Observer for download section
-  useEffect(() => {
-    const downloadSection = document.querySelector('section.bg-black');
-    if (!downloadSection) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          // Change logo when section reaches the top
-          setIsOverDownloadSection(entry.isIntersecting);
-        });
-      },
-      {
-        threshold: 0,
-        rootMargin: '-1px 0px 0px 0px', // Trigger exactly when it touches the top
-      }
-    );
-
-    observer.observe(downloadSection);
-
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  const ease = [0.16, 1, 0.3, 1] as const;
-
-  const overlayVariants: Variants = {
-    hidden: { y: "-100%" },
-    visible: { y: "0%", transition: { duration: 1.3, ease } },
-    exit: { y: "-100%", transition: { duration: 1.0, ease } },
-  };
-
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: { delayChildren: 0.6, staggerChildren: 0.09 },
-    },
-  };
-
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 60 },
-    visible: { opacity: 1, y: 0, transition: { duration: 1.2, ease } },
-  };
+  const dark = overDark && !scrolled && !open;
 
   return (
-    <>
-      {/* HEADER */}
-      <motion.header
-        className={`fixed top-0 left-0 w-full py-4 sm:py-0 px-4 sm:px-4 z-[200] transition-all duration-500`}
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        transition={{ duration: 0.6, ease }}
+    <header className="fixed inset-x-0 top-0 z-50 px-3 pt-3 sm:px-4">
+      <div
+        className={cx(
+          'mx-auto flex h-14 max-w-7xl items-center justify-between rounded-full pl-5 pr-2 transition-all duration-500 sm:h-16 sm:pl-6',
+          dark ? 'bg-transparent' : 'bg-white/80 shadow-[0_8px_30px_-12px_rgba(0,0,0,0.18)] ring-1 ring-black/5 backdrop-blur-xl'
+        )}
       >
-        <div className="max-w-7xl mx-auto flex justify-between items-center">
-          {/* LOGO */}
+        <Link href="/" aria-label="TeamTuned home" onClick={() => setOpen(false)}>
+          <Logo dark={dark} className="h-6 sm:h-7" />
+        </Link>
+
+        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
+          {nav.map((n) => {
+            // Section links are active while their section is on screen (home only); page links on their own page.
+            const hash = n.href.split('#')[1];
+            const current = hash ? active === hash : pathname === n.href;
+            return (
+              <Link
+                key={n.href}
+                href={n.href}
+                aria-current={current ? (hash ? 'location' : 'page') : undefined}
+                className={cx(
+                  'rounded-full px-4 py-2 text-sm font-semibold transition-colors',
+                  dark ? 'text-white/75 hover:bg-white/10 hover:text-white' : 'text-muted hover:bg-mist hover:text-ink',
+                  current && (dark ? 'bg-white/10 text-white' : 'bg-ink text-white hover:bg-ink hover:text-white')
+                )}
+              >
+                {n.label}
+              </Link>
+            );
+          })}
+        </nav>
+
+        <div className="flex items-center gap-1.5">
+          <a
+            href={`${APP_URL}/login`}
+            className={cx(
+              'hidden rounded-full px-4 py-2 text-sm font-semibold transition-colors sm:inline-flex',
+              dark ? 'text-white/80 hover:text-white' : 'text-ink hover:bg-mist'
+            )}
+          >
+            Log in
+          </a>
           <Link
-            href="/"
-            className={`relative transition-all duration-500 ${hideLogoOnMobile ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
+            href="/#demo"
+            data-demo-source="header"
+            className={cx(
+              'inline-flex h-11 items-center rounded-full px-4 text-sm font-semibold transition-colors sm:px-5',
+              dark ? 'bg-white text-ink hover:bg-white/90' : 'bg-ink text-white hover:bg-ink-2'
+            )}
           >
-            {/* Black Logo - Default */}
-            <img
-              src="/LogoBlackText.png"
-              alt="TeamTuned by Waardian"
-              className={`h-24 sm:h-26 w-auto object-contain transition-opacity duration-500 ${isOverDownloadSection ? 'opacity-0' : 'opacity-100'
-                }`}
-            />
-            {/* White Logo - Over Dark Sections */}
-            <img
-              src="/LogoWhiteText.png"
-              alt="TeamTuned by Waardian"
-              className={`absolute top-0 left-0 h-24 sm:h-26 w-auto object-contain transition-opacity duration-500 ${isOverDownloadSection ? 'opacity-100' : 'opacity-0'
-                }`}
-            />
+            Book a demo
           </Link>
-
-
-          <div className="flex items-center gap-4">
-
-            {/* MENU BUTTON */}
-            <motion.button
-              onClick={() => setOpen(!open)}
-              onMouseEnter={openMenu}
-              onMouseLeave={closeMenu}
-              className={`relative h-12 w-12 sm:h-14 sm:w-14 flex items-center justify-center rounded-full transition-all duration-300
-              ${scrolled ? "bg-black/90 hover:bg-black/90" : "bg-black/50 backdrop-blur-md hover:bg-black/90"}
-              `}
-              whileHover={{ scale: 1.12 }}
-              whileTap={{ scale: 0.95 }}
-              transition={{ duration: 0.4, ease }}
-              aria-label="Toggle menu"
-            >
-              {/* HAMBURGER */}
-              <motion.div
-                animate={{ opacity: open ? 0 : 1, rotate: open ? -90 : 0 }}
-                transition={{ duration: 0.5, ease }}
-                className="absolute flex flex-col gap-1.5"
-              >
-                <span className="block w-8 sm:w-9 h-1 rounded-full bg-white"></span>
-                <span className="block w-6 sm:w-7 h-1 rounded-full bg-white"></span>
-                <span className="block w-7 sm:w-8 h-1 rounded-full bg-white"></span>
-              </motion.div>
-
-              {/* CROSS */}
-              <motion.svg
-                width="28"
-                height="28"
-                viewBox="0 0 28 28"
-                fill="none"
-                animate={{ opacity: open ? 1 : 0, rotate: open ? 0 : 45 }}
-                transition={{ duration: 0.5, ease }}
-                className="absolute"
-              >
-                <path
-                  d="M6 6L22 22M22 6L6 22"
-                  stroke="white"
-                  strokeWidth="4"
-                  strokeLinecap="round"
-                />
-              </motion.svg>
-            </motion.button>
-          </div>
-        </div>
-      </motion.header>
-
-      {/* FULLSCREEN MENU */}
-      <AnimatePresence mode="wait">
-        {open && (
-          <motion.div
-            variants={overlayVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            className="fixed inset-0 bg-black z-[150]"
-            onMouseEnter={openMenu}
-            onMouseLeave={closeMenu}
+          <button
+            type="button"
+            onClick={() => setOpen((v) => !v)}
+            aria-label={open ? 'Close menu' : 'Open menu'}
+            aria-expanded={open}
+            aria-controls="mobile-nav"
+            className={cx(
+              'flex h-11 w-11 items-center justify-center rounded-full transition-colors lg:hidden',
+              dark ? 'text-white hover:bg-white/10' : 'text-ink hover:bg-mist'
+            )}
           >
-            <div className="h-full flex flex-col justify-center px-6 sm:px-10 md:px-20">
-              <motion.div
-                variants={containerVariants}
-                className="space-y-6 sm:space-y-10 max-w-4xl"
-              >
-                {navLinks.map((link) => (
-                  <motion.div key={link.label} variants={itemVariants}>
-                    <Link
-                      href={link.path}
-                      onClick={() => setOpen(false)}
-                      className="group block"
-                    >
-                      <span className="block text-white text-4xl sm:text-6xl md:text-7xl font-light tracking-tight 
-                        transition-all duration-700 
-                        group-hover:font-normal group-hover:translate-x-4 sm:group-hover:translate-x-10"
-                      >
-                        {link.label}
-                      </span>
-                    </Link>
-                  </motion.div>
-                ))}
-              </motion.div>
+            {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+          </button>
+        </div>
+      </div>
 
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.5 }}
-                transition={{ delay: 1.3, duration: 1.2 }}
-                className="absolute bottom-8 sm:bottom-12 left-6 sm:left-10 md:left-20 text-white text-xs sm:text-sm uppercase tracking-widest"
-              >
-                business@teamtuned.com
-              </motion.div>
+      <AnimatePresence>
+        {open && (
+          <m.nav
+            id="mobile-nav"
+            aria-label="Mobile"
+            initial={{ opacity: 0, y: -12, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -12, scale: 0.98 }}
+            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+            className="mx-auto mt-2 max-w-7xl rounded-3xl bg-white p-3 shadow-[0_24px_60px_-20px_rgba(0,0,0,0.35)] ring-1 ring-black/5 lg:hidden"
+          >
+            {nav.map((n, i) => (
+              <m.div key={n.href} initial={{ opacity: 0, x: -8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.04 * i }}>
+                <Link href={n.href} onClick={() => setOpen(false)} className="block rounded-2xl px-4 py-3.5 text-lg font-bold text-ink hover:bg-mist">
+                  {n.label}
+                </Link>
+              </m.div>
+            ))}
+            <div className="mt-2 grid grid-cols-2 gap-2 border-t border-line pt-3">
+              <a href={`${APP_URL}/login`} className="flex h-12 items-center justify-center rounded-full border border-line font-semibold text-ink">
+                Log in
+              </a>
+              <Link href="/#demo" data-demo-source="mobile_menu" onClick={() => setOpen(false)} className="flex h-12 items-center justify-center rounded-full bg-ink font-semibold text-white">
+                Book a demo
+              </Link>
             </div>
-          </motion.div>
+          </m.nav>
         )}
       </AnimatePresence>
-    </>
+    </header>
   );
 }
